@@ -53,7 +53,7 @@ export const RecruitmentWhatsAppCta: React.FC<RecruitmentWhatsAppCtaProps> = ({
           }`}
         >
           <WhatsAppIcon className="w-3.5 h-3.5" />
-          <span>Connect with the EventsKonnectGh Support Line</span>
+          <span>Connect with the EventsKonnectGh Customer Support</span>
         </a>
       </div>
     </div>
