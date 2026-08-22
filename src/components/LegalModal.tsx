@@ -110,7 +110,7 @@ export const LegalModal: React.FC<LegalModalProps> = ({ type, onClose }) => {
               <div>
                 <h4 className="font-bold text-slate-900 text-base mb-1">2. Independent Representative Nature</h4>
                 <p>
-                  Joining as a Sales Representative with EventsKonnectGh offers flexible, commission-based compensation per successful vendor registration (30% commission / GH₵15 per vendor). Representatives operate on their own chosen schedule.
+                  Joining as a Sales Representative with EventsKonnectGh offers flexible, commission-based compensation per successful vendor registration (30% commission / 15 GH₵ per vendor). Representatives operate on their own chosen schedule.
                 </p>
               </div>
 

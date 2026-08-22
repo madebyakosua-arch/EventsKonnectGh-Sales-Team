@@ -28,7 +28,7 @@ export const EarningsSection: React.FC = () => {
                 How It Works:
               </h4>
               <p className="text-sm sm:text-base leading-relaxed text-white/90">
-                When an event vendor or service provider (such as a caterer, photographer, DJ, decorator, or venue) registers and lists their business on EventsKonnectGH through you, <strong className="text-white underline decoration-yellow-300 decoration-2 underline-offset-2">you earn 30% commission (GH₵15) per vendor</strong> on their registration fee.
+                When an event vendor or service provider (such as a caterer, photographer, DJ, decorator, or venue) registers and lists their business on EventsKonnectGH through you, <strong className="text-white underline decoration-yellow-300 decoration-2 underline-offset-2">you earn 30% commission (15 GH₵) per vendor</strong> on their registration fee.
               </p>
             </div>
 
@@ -56,16 +56,16 @@ export const EarningsSection: React.FC = () => {
                     Scenario 1: 5 Vendors / Day
                   </span>
                   <p className="text-sm text-slate-600 mb-3">
-                    If you register <strong>5 vendors a day</strong> at GH₵15 commission each:
+                    If you register <strong>5 vendors a day</strong> at 15 GH₵ commission each:
                   </p>
                   <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 text-center mb-3">
                     <span className="text-xs text-slate-500 font-medium block">Daily Earnings</span>
-                    <span className="text-xl font-black text-slate-900">GH₵15 × 5 = <span className="text-red-600">GH₵75 / day</span></span>
+                    <span className="text-xl font-black text-slate-900">15 GH₵ × 5 = <span className="text-red-600">75 GH₵ / day</span></span>
                   </div>
                 </div>
                 <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-sm">
                   <span className="text-slate-600 font-medium">Monthly Total (30 days):</span>
-                  <span className="font-extrabold text-slate-950 text-base">GH₵2,250</span>
+                  <span className="font-extrabold text-slate-950 text-base">2,250 GH₵</span>
                 </div>
               </div>
 
@@ -76,16 +76,16 @@ export const EarningsSection: React.FC = () => {
                     Scenario 2: 10 Vendors / Day
                   </span>
                   <p className="text-sm text-slate-600 mb-3">
-                    If you register <strong>10 vendors a day</strong> at GH₵15 commission each:
+                    If you register <strong>10 vendors a day</strong> at 15 GH₵ commission each:
                   </p>
                   <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 text-center mb-3">
                     <span className="text-xs text-slate-500 font-medium block">Daily Earnings</span>
-                    <span className="text-xl font-black text-slate-900">GH₵15 × 10 = <span className="text-red-600">GH₵150 / day</span></span>
+                    <span className="text-xl font-black text-slate-900">15 GH₵ × 10 = <span className="text-red-600">150 GH₵ / day</span></span>
                   </div>
                 </div>
                 <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-sm">
                   <span className="text-slate-600 font-medium">Monthly Total (30 days):</span>
-                  <span className="font-extrabold text-slate-950 text-base">GH₵4,500</span>
+                  <span className="font-extrabold text-slate-950 text-base">4,500 GH₵</span>
                 </div>
               </div>
             </div>
