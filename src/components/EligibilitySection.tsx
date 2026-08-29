@@ -15,7 +15,7 @@ export const EligibilitySection: React.FC = () => {
           </p>
         </div>
 
-        {/* 2 Clear Requirements */}
+        {/* Key Requirements */}
         <div className="max-w-xl mx-auto space-y-4 mb-8 text-left">
           
           <div className="flex items-center gap-4 bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200">
@@ -35,7 +35,18 @@ export const EligibilitySection: React.FC = () => {
             </div>
             <div>
               <h3 className="text-base sm:text-lg font-bold text-slate-900">
-                Have an active and genuine social media presence
+                Be comfortable communicating with vendors and business owners
+              </h3>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4 bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200">
+            <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
+              <Check className="w-5 h-5 text-emerald-600 stroke-[3]" />
+            </div>
+            <div>
+              <h3 className="text-base sm:text-lg font-bold text-slate-900">
+                Be prepared to actively reach out to potential event service providers
               </h3>
             </div>
           </div>

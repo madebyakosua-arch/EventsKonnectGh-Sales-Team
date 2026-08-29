@@ -7,28 +7,28 @@ export interface TeamContact {
   leadTime?: string;
 }
 
-export const PREFILLED_MESSAGE = "Hello EventsKonnectGH, I saw your Sales Team opportunity and would like some more information about the role.";
+export const PREFILLED_MESSAGE = "Hi, I want to join the EventsKonnectGH Sales Team and have some questions.";
 
 export const WHATSAPP_CONTACTS: TeamContact[] = [
   {
     id: "team-1",
-    name: "Speak to the recruitment team advisor 1",
-    phone: "233539733353",
-    displayPhone: "+233 53 973 3353",
-    url: `https://wa.me/233539733353?text=${encodeURIComponent(PREFILLED_MESSAGE)}`,
+    name: "Speak to the recruitment team advisor",
+    phone: "233554700904",
+    displayPhone: "+233 55 470 0904",
+    url: `https://wa.me/233554700904?text=${encodeURIComponent(PREFILLED_MESSAGE)}`,
     leadTime: "Online now • Fast response"
   },
   {
     id: "team-2",
-    name: "Speak to the recruitment team advisor 2",
-    phone: "233554700904",
-    displayPhone: "+233 55 470 0904",
-    url: `https://wa.me/233554700904?text=${encodeURIComponent(PREFILLED_MESSAGE)}`,
+    name: "Secondary recruitment advisor",
+    phone: "233539733353",
+    displayPhone: "+233 53 973 3353",
+    url: `https://wa.me/233539733353?text=${encodeURIComponent(PREFILLED_MESSAGE)}`,
     leadTime: "Online now • Dedicated agent"
   }
 ];
 
-export const PRIMARY_STICKY_WHATSAPP = `https://wa.me/233539733353?text=${encodeURIComponent(PREFILLED_MESSAGE)}`;
+export const PRIMARY_STICKY_WHATSAPP = `https://wa.me/233554700904?text=${encodeURIComponent(PREFILLED_MESSAGE)}`;
 
 export const OFFICIAL_WEBSITE_URL = "https://www.eventskonnectgh.com";
 
