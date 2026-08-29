@@ -14,11 +14,31 @@ import { MobileStickyCTA } from './components/MobileStickyCTA';
 import { EligibilityModal } from './components/EligibilityModal';
 
 const LOCAL_STORAGE_KEY = 'eventskonnect_sales_eligibility_status';
+const ELIGIBILITY_COMPLETED_KEY = 'eventskonnect_sales_eligibility_completed';
 
 export default function App() {
-  const [isEligibilityOpen, setIsEligibilityOpen] = useState<boolean>(true);
+  const [isEligibilityOpen, setIsEligibilityOpen] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    try {
+      const isCompleted = localStorage.getItem(ELIGIBILITY_COMPLETED_KEY);
+      const status = localStorage.getItem(LOCAL_STORAGE_KEY);
+      // Do not show popup again if user has already gone through all steps
+      if (isCompleted === 'true' || status === 'qualified' || status === 'unqualified') {
+        return false;
+      }
+      // Show if user is new or got disconnected halfway through
+      return true;
+    } catch {
+      return true;
+    }
+  });
 
   const handleQualified = () => {
+    try {
+      localStorage.setItem(ELIGIBILITY_COMPLETED_KEY, 'true');
+    } catch {
+      // ignore
+    }
     setIsEligibilityOpen(false);
   };
 

@@ -62,6 +62,8 @@ const QUESTIONS: QuestionConfig[] = [
 ];
 
 const LOCAL_STORAGE_KEY = 'eventskonnect_sales_eligibility_status';
+const ELIGIBILITY_COMPLETED_KEY = 'eventskonnect_sales_eligibility_completed';
+const PROGRESS_STORAGE_KEY = 'eventskonnect_sales_eligibility_progress';
 const INTEREST_LIST_STORAGE_KEY = 'eventskonnect_sales_interest_leads';
 const PRIMARY_RECRUITMENT_PHONE = '233554700904';
 const SECONDARY_SUPPORT_PHONE = '233539733353';
@@ -114,8 +116,49 @@ export const EligibilityModal: React.FC<EligibilityModalProps> = ({
   onQualified,
   onRetake
 }) => {
-  const [currentStep, setCurrentStep] = useState<ModalStep>('intro');
-  const [answers, setAnswers] = useState<Record<number, string>>({});
+  const [currentStep, setCurrentStep] = useState<ModalStep>(() => {
+    if (typeof window === 'undefined') return 'intro';
+    try {
+      const isCompleted = localStorage.getItem(ELIGIBILITY_COMPLETED_KEY);
+      if (isCompleted !== 'true') {
+        const saved = localStorage.getItem(PROGRESS_STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (
+            parsed &&
+            (parsed.step === 'intro' ||
+              typeof parsed.step === 'number' ||
+              parsed.step === 'interest_form')
+          ) {
+            return parsed.step;
+          }
+        }
+      }
+    } catch {
+      // ignore
+    }
+    return 'intro';
+  });
+
+  const [answers, setAnswers] = useState<Record<number, string>>(() => {
+    if (typeof window === 'undefined') return {};
+    try {
+      const isCompleted = localStorage.getItem(ELIGIBILITY_COMPLETED_KEY);
+      if (isCompleted !== 'true') {
+        const saved = localStorage.getItem(PROGRESS_STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed && parsed.answers && typeof parsed.answers === 'object') {
+            return parsed.answers;
+          }
+        }
+      }
+    } catch {
+      // ignore
+    }
+    return {};
+  });
+
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   // Form State
@@ -136,6 +179,24 @@ export const EligibilityModal: React.FC<EligibilityModalProps> = ({
   // Internal evaluation storage
   const [evaluatedInternalReason, setEvaluatedInternalReason] = useState<string>('');
   const [evaluatedInternalCategory, setEvaluatedInternalCategory] = useState<string>('');
+
+  // Continuously save in-progress state if user gets disconnected halfway through
+  useEffect(() => {
+    if (
+      currentStep === 'intro' ||
+      typeof currentStep === 'number' ||
+      currentStep === 'interest_form'
+    ) {
+      try {
+        localStorage.setItem(
+          PROGRESS_STORAGE_KEY,
+          JSON.stringify({ step: currentStep, answers })
+        );
+      } catch {
+        // ignore
+      }
+    }
+  }, [currentStep, answers]);
 
   // Lock body scroll when modal is open and prevent escape dismissal
   useEffect(() => {
@@ -251,26 +312,19 @@ export const EligibilityModal: React.FC<EligibilityModalProps> = ({
 
     setIsTransitioning(true);
     setTimeout(() => {
+      try {
+        localStorage.setItem(ELIGIBILITY_COMPLETED_KEY, 'true');
+        localStorage.setItem(LOCAL_STORAGE_KEY, qualifies ? 'qualified' : 'unqualified');
+        localStorage.removeItem(PROGRESS_STORAGE_KEY);
+      } catch {
+        // ignore
+      }
+
       if (qualifies) {
-        try {
-          localStorage.setItem(LOCAL_STORAGE_KEY, 'qualified');
-        } catch {
-          // ignore
-        }
         setCurrentStep('success');
       } else if (isUnder18) {
-        try {
-          localStorage.setItem(LOCAL_STORAGE_KEY, 'unqualified');
-        } catch {
-          // ignore
-        }
         setCurrentStep('unsuccessful_under_18');
       } else {
-        try {
-          localStorage.setItem(LOCAL_STORAGE_KEY, 'unqualified');
-        } catch {
-          // ignore
-        }
         setCurrentStep('unsuccessful');
       }
       setIsTransitioning(false);
@@ -291,6 +345,12 @@ export const EligibilityModal: React.FC<EligibilityModalProps> = ({
     // Spam honeypot detection
     if (honeypot.trim().length > 0) {
       // Silently complete without saving spam
+      try {
+        localStorage.setItem(ELIGIBILITY_COMPLETED_KEY, 'true');
+        localStorage.removeItem(PROGRESS_STORAGE_KEY);
+      } catch {
+        // ignore
+      }
       setCurrentStep('interest_confirmed');
       return;
     }
@@ -394,6 +454,8 @@ export const EligibilityModal: React.FC<EligibilityModalProps> = ({
       const list: SavedInterestLead[] = existing ? JSON.parse(existing) : [];
       list.unshift(newLead);
       localStorage.setItem(INTEREST_LIST_STORAGE_KEY, JSON.stringify(list));
+      localStorage.setItem(ELIGIBILITY_COMPLETED_KEY, 'true');
+      localStorage.removeItem(PROGRESS_STORAGE_KEY);
     } catch {
       // ignore storage restriction
     }
@@ -777,11 +839,22 @@ export const EligibilityModal: React.FC<EligibilityModalProps> = ({
                   href={OFFICIAL_WEBSITE_URL}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={onQualified}
                   className="w-full inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 active:bg-slate-950 text-white font-bold text-sm sm:text-base py-4 px-6 rounded-xl shadow-md transition-all active:scale-[0.98]"
                 >
                   <span>VISIT EVENTS KONNECT GH</span>
                   <ExternalLink className="w-4 h-4" />
                 </a>
+
+                <div className="pt-1 text-center">
+                  <button
+                    id="under18-view-page-btn"
+                    onClick={onQualified}
+                    className="text-xs font-semibold text-slate-500 hover:text-slate-800 underline decoration-slate-300 underline-offset-4 cursor-pointer"
+                  >
+                    Close & View Sales Page
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -830,11 +903,22 @@ export const EligibilityModal: React.FC<EligibilityModalProps> = ({
                   href={OFFICIAL_WEBSITE_URL}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={onQualified}
                   className="w-full inline-flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-800 font-bold text-sm sm:text-base py-3.5 px-6 rounded-xl transition-all"
                 >
                   <span>VISIT EVENTS KONNECT GH</span>
                   <ExternalLink className="w-4 h-4" />
                 </a>
+
+                <div className="pt-1 text-center">
+                  <button
+                    id="ineligible-view-page-btn"
+                    onClick={onQualified}
+                    className="text-xs font-semibold text-slate-500 hover:text-slate-800 underline decoration-slate-300 underline-offset-4 cursor-pointer"
+                  >
+                    Close & View Sales Page
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -1120,17 +1204,28 @@ export const EligibilityModal: React.FC<EligibilityModalProps> = ({
                 <span>We have registered your contact preferences. You can now explore the main EventsKonnectGH marketplace to learn more about how we connect event professionals with clients across Ghana.</span>
               </div>
 
-              <div className="pt-2">
+              <div className="pt-2 space-y-3">
                 <a
                   id="confirmed-visit-website-btn"
                   href={OFFICIAL_WEBSITE_URL}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={onQualified}
                   className="w-full inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 active:bg-slate-950 text-white font-bold text-sm sm:text-base py-4 px-6 rounded-xl shadow-md transition-all active:scale-[0.98]"
                 >
                   <span>VISIT EVENTS KONNECT GH</span>
                   <ExternalLink className="w-4 h-4" />
                 </a>
+
+                <div className="pt-1 text-center">
+                  <button
+                    id="confirmed-view-page-btn"
+                    onClick={onQualified}
+                    className="text-xs font-semibold text-slate-500 hover:text-slate-800 underline decoration-slate-300 underline-offset-4 cursor-pointer"
+                  >
+                    Close & View Sales Page
+                  </button>
+                </div>
               </div>
             </div>
           )}
